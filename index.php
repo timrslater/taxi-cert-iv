@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('includes/database.php');
 $page_title = "Taxi Home";
 ?>

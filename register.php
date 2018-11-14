@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('includes/database.php');
 $page_title = "Register New User";
 
@@ -36,16 +37,26 @@ if($request_type== 'POST'){
         
         $statement = $connection -> prepare( $query );
         $statement -> bind_param('ssss',$customer_name, $customer_email, $customer_mobile, $hash);
-        if($statement -> execute()){
-            //success
-            //redirect to booking page
+        if($statement -> execute() ){
+            
+             //redirect to home page
+             $_SESSION['name'] = $customer_name;
+             $_SESSION['email'] = $customer_email;
+             header('location: index.php');
+             
+             //success
+             //redirect to booking page
         }
-        else{
+        else{    
+            if( $connection -> errno == '1062'){
+                $errors['customer_email'] = 'email already used';
+            }
+            else{
             $errors['registration'] = 'Oops something went wrong!';
+            }
         }
     }
 }
-
 ?>
 <html>
     <?php include('includes/head.php')?>
